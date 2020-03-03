@@ -54,50 +54,28 @@
   font-weight: 800;
 }
 
-.ColorBoxLightsOut.top-left-rounded {
-  border-top-left-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.top-right-rounded {
-  border-top-right-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.bottom-left-rounded {
-  border-bottom-left-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.bottom-right-rounded {
-  border-bottom-right-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.all-rounded {
-  border-radius: var(--border-rad-box);
-}
-
+.ColorBoxLightsOut.top-left-rounded,
+.ColorBoxLightsOut.top-left-rounded .inner,
 .ColorBoxLightsOut.top-left-rounded::after {
   border-top-left-radius: var(--border-rad-box);
 }
+.ColorBoxLightsOut.top-right-rounded,
+.ColorBoxLightsOut.top-right-rounded .inner,
 .ColorBoxLightsOut.top-right-rounded::after {
   border-top-right-radius: var(--border-rad-box);
 }
+.ColorBoxLightsOut.bottom-left-rounded,
+.ColorBoxLightsOut.bottom-left-rounded .inner,
 .ColorBoxLightsOut.bottom-left-rounded::after {
   border-bottom-left-radius: var(--border-rad-box);
 }
+.ColorBoxLightsOut.bottom-right-rounded,
+.ColorBoxLightsOut.bottom-right-rounded .inner,
 .ColorBoxLightsOut.bottom-right-rounded::after {
   border-bottom-right-radius: var(--border-rad-box);
 }
+.ColorBoxLightsOut.all-rounded,
+.ColorBoxLightsOut.all-rounded .inner,
 .ColorBoxLightsOut.all-rounded::after {
-  border-radius: var(--border-rad-box);
-}
-
-.ColorBoxLightsOut.top-left-rounded .inner {
-  border-top-left-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.top-right-rounded .inner {
-  border-top-right-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.bottom-left-rounded .inner {
-  border-bottom-left-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.bottom-right-rounded .inner {
-  border-bottom-right-radius: var(--border-rad-box);
-}
-.ColorBoxLightsOut.all-rounded .inner {
   border-radius: var(--border-rad-box);
 }

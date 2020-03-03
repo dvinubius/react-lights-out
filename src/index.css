@@ -20,18 +20,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 :root {
 
   --app-bg-col-2: #3d0a3a;
   --app-bg-col: #120311;
   --gallery-bg-col: #130d4f;
-
-  --react-light-blue-col: rgba(0, 216, 255, 1);
 
   --neon-text-color: #f40;
   
