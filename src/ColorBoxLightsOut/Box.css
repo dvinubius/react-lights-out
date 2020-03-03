@@ -1,0 +1,103 @@
+.ColorBoxLightsOut {
+  cursor: crosshair;
+  position: relative;
+  transition: box-shadow 0.3s ease-out;
+}
+
+.ColorBoxLightsOut.frozen {
+  pointer-events: none;
+}
+
+.ColorBoxLightsOut::after {
+  content: "";
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  box-shadow: inset 0 0 7px -1px var(--box-targeted-color);
+  pointer-events: none;
+
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.ColorBoxLightsOut.targeted::after{
+  opacity: 1;
+}
+
+.ColorBoxLightsOut .inner {
+  --dur: calc(var(--duration) * 1s);
+  width: 100%;
+  height: 100%;
+  transition: transform var(--dur) ease-out,
+      box-shadow 0.1s ease-out,
+      filter var(--dur) ease-out, 
+      font-size var(--dur) ease-out, 
+      font-weight var(--dur) ease-out;
+  box-shadow: inset 0 0 0px 1px var(--gallery-bg-col);
+  background: radial-gradient(circle, var(--box-neon-color-2) 0%, var(--box-neon-color-2) 5%, var(--box-neon-color-1) 100%);
+}
+
+.ColorBoxLightsOut .inner.transparent {
+  background: transparent;
+}
+
+.ColorBoxLightsOut.sunk .inner{
+  box-shadow: inset 0 0 0px 9px var(--gallery-bg-col);
+  font-size: 1px;
+}
+
+.ColorBoxLightsOut.turning .inner{
+  transform: scale(0.05) rotateY(90deg) !important;
+  filter: brightness(0.05);
+  font-weight: 800;
+}
+
+.ColorBoxLightsOut.top-left-rounded {
+  border-top-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.top-right-rounded {
+  border-top-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-left-rounded {
+  border-bottom-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-right-rounded {
+  border-bottom-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.all-rounded {
+  border-radius: var(--border-rad-box);
+}
+
+.ColorBoxLightsOut.top-left-rounded::after {
+  border-top-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.top-right-rounded::after {
+  border-top-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-left-rounded::after {
+  border-bottom-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-right-rounded::after {
+  border-bottom-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.all-rounded::after {
+  border-radius: var(--border-rad-box);
+}
+
+.ColorBoxLightsOut.top-left-rounded .inner {
+  border-top-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.top-right-rounded .inner {
+  border-top-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-left-rounded .inner {
+  border-bottom-left-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.bottom-right-rounded .inner {
+  border-bottom-right-radius: var(--border-rad-box);
+}
+.ColorBoxLightsOut.all-rounded .inner {
+  border-radius: var(--border-rad-box);
+}

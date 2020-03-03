@@ -1,0 +1,22 @@
+.GalleryLayout {
+  --size: 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  width: var(--size);
+  height: var(--size);
+  background-color: var(--gallery-bg-col);
+
+  perspective: 1200px;
+
+  box-shadow: 0 0 .25rem #fff,
+      inset 0 0 .25rem #fff,
+      0 0 1rem var(--neon-border-color),
+      inset 0 0 1rem var(--neon-border-color),
+      0 0 2rem var(--neon-border-color),
+      inset 0 0 2rem var(--neon-border-color);        
+    background-color: transparent;
+}
