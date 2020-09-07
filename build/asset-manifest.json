@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f6eef572.chunk.css",
+    "main.js": "/static/js/main.d4a61418.chunk.js",
+    "main.js.map": "/static/js/main.d4a61418.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.595897ae.js",
+    "runtime-main.js.map": "/static/js/runtime-main.595897ae.js.map",
+    "static/js/2.5802f60b.chunk.js": "/static/js/2.5802f60b.chunk.js",
+    "static/js/2.5802f60b.chunk.js.map": "/static/js/2.5802f60b.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.79f0d33afa8199e10a50cf48377693f5.js": "/precache-manifest.79f0d33afa8199e10a50cf48377693f5.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.f6eef572.chunk.css.map": "/static/css/main.f6eef572.chunk.css.map",
+    "static/js/2.5802f60b.chunk.js.LICENSE": "/static/js/2.5802f60b.chunk.js.LICENSE",
+    "static/media/index.css": "/static/media/neon-webfont.351efb00.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.595897ae.js",
+    "static/js/2.5802f60b.chunk.js",
+    "static/css/main.f6eef572.chunk.css",
+    "static/js/main.d4a61418.chunk.js"
+  ]
+}

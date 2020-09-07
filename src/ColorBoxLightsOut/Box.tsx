@@ -1,8 +1,14 @@
-import React from 'react';
-import './Box.css';
+import React, { useMemo, useCallback } from "react";
+import "./Box.css";
+import { useBoxState } from "./useBoxState";
 
 export enum Corner {
-  TL, TR, BL, BR, NONE, ALL
+  TL,
+  TR,
+  BL,
+  BR,
+  NONE,
+  ALL,
 }
 
 export interface BoxProps {
@@ -21,185 +27,90 @@ export interface BoxProps {
   frozen: boolean;
 }
 
-interface BoxState {
-  innerState: InnerMachineState,
-  outerState: OuterMachineState,
-}
+const Box = (props: BoxProps) => {
+  const {
+    width,
+    height,
+    active,
+    isTargeted,
+    turnTrigger,
+    sinkTrigger,
+    index,
+    rounded,
+    frozen,
+    beenClicked,
+    beenEntered,
+    beenLeft,
+    toggleMe,
+  } = props;
 
-enum InnerMachineState {
-  ABSENT = 'absent',
-  SINKING = 'sinking',
-  SUNK = 'sunk',
-  TURNING = 'turning',
-  RETURNING = 'returning'
-}
+  const toggleTargeted = useCallback(() => toggleMe(index), [toggleMe, index]);
 
-enum OuterMachineState {
-  IN = 'in',
-  OUT = 'out'
-}
+  const {
+    handleTransitionEnd,
+    canShowAsTargeted,
+    isTurning,
+    isSunk,
+  } = useBoxState(toggleTargeted, turnTrigger, sinkTrigger);
 
-class Box extends React.Component<BoxProps> {
-  state: BoxState = {
-    innerState: InnerMachineState.ABSENT,
-    outerState: OuterMachineState.OUT,
-  }
-
-  get sunkStates(): InnerMachineState[] {
-    return [
-      InnerMachineState.SINKING,
-      InnerMachineState.SUNK,
-      InnerMachineState.RETURNING
-    ]
+  const enterHandler = () => {
+    beenEntered(index);
+  };
+  const leaveHandler = () => {
+    beenLeft(index);
   };
 
-
-  render() {
-    const isTurning = this.state.innerState === InnerMachineState.TURNING;
-    const isSunk = this.sunkStates.includes(this.state.innerState);
-    const showAsTargeted = this.props.isTargeted
-      && isSunk
-      && ![
-        InnerMachineState.RETURNING,
-        InnerMachineState.RETURNING,
-        InnerMachineState.ABSENT
-      ].includes(this.state.innerState);
-    const classes: string = "ColorBoxLightsOut" 
-      + (isTurning ? " turning" : "")
-      + (isSunk  ? " sunk" : "")
-      + (showAsTargeted ? " targeted" : "")
-      + (this.getCornerRoundingClass())
-      + (this.props.frozen ? ' frozen' : '');
-    return (
-      <div className={classes}
-        style={this.computeSizeCss()}
-        onMouseEnter={this.enterHandler}
-        onMouseLeave={this.leaveHandler}
-        >
-        <div className={"inner" + (this.props.active ? '' : ' transparent')}
-          onClick={this.clickHandler}
-          onTransitionEnd={this.handleTransitionEnd}></div>
-        </div>
-      )
-  }
-
-  componentDidUpdate(prevProps: BoxProps, prevState: BoxState){
-    if (prevProps.turnTrigger < this.props.turnTrigger){
-      this.turn();
-    }
-    if (prevProps.sinkTrigger < this.props.sinkTrigger){
-      this.sink();
-    }
-    if (prevProps.sinkTrigger > this.props.sinkTrigger){
-      this.unSink();
-    }
-  }
-  
-  computeSizeCss = () => ({
-    width: this.props.width+'px',
-    height: this.props.height+'px'
-  });
-
-  enterHandler = () => {
-    this.props.beenEntered(this.props.index);
-  }
-  leaveHandler = () => {
-    this.props.beenLeft(this.props.index);
-  }
-  
-  sink = () => {
-    switch (this.state.innerState) {
-      case InnerMachineState.ABSENT:
-      case InnerMachineState.RETURNING:
-        this.setState({
-          innerState: InnerMachineState.SINKING,
-          outerState: OuterMachineState.IN
-        });
-        return;
-      default:
-        this.setState({
-          outerState: OuterMachineState.IN
-        });
-        return;
-    }
-  }
-
-  unSink = () => {
-    if (
-      [InnerMachineState.SINKING, InnerMachineState.SUNK].includes(
-        this.state.innerState
-      )
-    ) {
-      this.setState({
-        innerState: InnerMachineState.ABSENT,
-        outerState: OuterMachineState.OUT
-      });
-      return;
-    }
-    this.setState({ outerState: OuterMachineState.OUT });
-  }
-
-  clickHandler = () => {
-    this.props.beenClicked(this.props.index);
-  }
-
-  turn = () => {
-    switch (this.state.innerState) {
-      case InnerMachineState.SINKING:
-      case InnerMachineState.SUNK:
-        this.setState({innerState: InnerMachineState.TURNING});
-        return;
-      default:
-        return;
-    }
-  }
-
-  handleTransitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
-    event.persist();
-    const update = (currState: BoxState) => {
-      if (event.propertyName === 'font-size') {
-        switch (currState.innerState) {
-          case InnerMachineState.SINKING:
-            return {innerState: InnerMachineState.SUNK}
-          default:
-            break;
-        }
-      }
-      
-      if (event.propertyName === 'font-weight') {
-        switch (currState.innerState) {
-          case InnerMachineState.TURNING:
-            this.props.toggleMe(this.props.index);
-            return {innerState: InnerMachineState.RETURNING};
-          case InnerMachineState.RETURNING:
-            return currState.outerState === OuterMachineState.OUT
-              ? {innerState: InnerMachineState.ABSENT}
-              : {innerState: InnerMachineState.SUNK};
-          default:
-            break;
-        }
-      }
-    }
-    this.setState(update);
+  const clickHandler = () => {
+    beenClicked(index);
   };
 
-  getCornerRoundingClass() {
-    switch (this.props.rounded) {
+  const cornerRoundingClass = useMemo(() => {
+    switch (rounded) {
       case Corner.TL:
-        return ' top-left-rounded';
+        return " top-left-rounded";
       case Corner.TR:
-        return ' top-right-rounded';
+        return " top-right-rounded";
       case Corner.BL:
-        return ' bottom-left-rounded';
+        return " bottom-left-rounded";
       case Corner.BR:
-        return ' bottom-right-rounded';
+        return " bottom-right-rounded";
       case Corner.ALL:
-        return ' all-rounded';
+        return " all-rounded";
       case Corner.NONE:
-        return '';
+        return "";
     }
-  }
-}
+  }, [rounded]);
 
+  const sizeCss = useMemo(
+    () => ({
+      width: width + "px",
+      height: height + "px",
+    }),
+    [width, height]
+  );
+
+  const showAsTargeted = isTargeted && canShowAsTargeted;
+  const classes: string =
+    "ColorBoxLightsOut" +
+    (isTurning ? " turning" : "") +
+    (isSunk ? " sunk" : "") +
+    (showAsTargeted ? " targeted" : "") +
+    cornerRoundingClass +
+    (frozen ? " frozen" : "");
+  return (
+    <div
+      className={classes}
+      style={sizeCss}
+      onMouseEnter={enterHandler}
+      onMouseLeave={leaveHandler}
+    >
+      <div
+        className={"inner" + (active ? "" : " transparent")}
+        onClick={clickHandler}
+        onTransitionEnd={handleTransitionEnd}
+      ></div>
+    </div>
+  );
+};
 
 export default Box;

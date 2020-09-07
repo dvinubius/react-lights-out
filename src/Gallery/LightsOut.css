@@ -10,6 +10,11 @@
     border-radius: .5rem;
     text-transform: uppercase;
     animation: flicker 1.5s infinite alternate;     
+    transition: transform 4s ease-in-out;
+    z-index: 10;
+  }
+  .App .lightsout.finished {
+    transform: translateY(35vh);
   }
   
   .App .lightsout::-moz-selection {

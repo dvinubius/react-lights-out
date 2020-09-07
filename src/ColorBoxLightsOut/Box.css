@@ -54,6 +54,12 @@
   font-weight: 800;
 }
 
+.ColorBoxLightsOut,
+.ColorBoxLightsOut .inner,
+.ColorBoxLightsOut::after {
+  border-radius: .2em;
+}
+
 .ColorBoxLightsOut.top-left-rounded,
 .ColorBoxLightsOut.top-left-rounded .inner,
 .ColorBoxLightsOut.top-left-rounded::after {
