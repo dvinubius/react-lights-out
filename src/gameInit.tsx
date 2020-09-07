@@ -7,4 +7,11 @@ const gameConfig = {
 
 const totalNumberOfBoxes = gameConfig.numberOfBoxesPerSide ** 2;
 
-export { gameConfig, totalNumberOfBoxes };
+const paddingInPage = 2 * gameConfig.margin;
+
+const boxSize = Math.floor(
+  (Math.min(window.innerWidth, window.innerHeight) - paddingInPage) /
+    gameConfig.numberOfBoxesPerSide
+);
+
+export { gameConfig, totalNumberOfBoxes, paddingInPage, boxSize };

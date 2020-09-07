@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction, useCallback } from "react";
 import { totalNumberOfBoxes } from "../gameInit";
 import { initializeWinnableConfig, getRegionAroundIndex } from "./aux";
 
@@ -26,31 +26,40 @@ const useGameState = (): {
     sinkTriggeredBoxes: new Array(totalNumberOfBoxes).fill(0),
   });
 
-  const modifyAroundIndex = (modifier: (val: number) => number) => (
-    oldState: LightsOutState,
-    index: number
-  ): LightsOutState => {
-    const triggerVals = oldState.sinkTriggeredBoxes.slice();
-    const targetedFlags = oldState.targetedBoxes.slice();
-    getRegionAroundIndex(index).forEach((i: number) => {
-      triggerVals[i] = modifier(triggerVals[i]);
-      targetedFlags[i] = true;
-    });
-    return {
-      ...oldState,
-      sinkTriggeredBoxes: triggerVals,
-      targetedBoxes: targetedFlags,
-    };
-  };
+  const modifySinkValAroundIndex = useCallback(
+    (modifier: (val: number) => number) => (
+      oldState: LightsOutState,
+      index: number
+    ): LightsOutState => {
+      const triggerVals = oldState.sinkTriggeredBoxes.slice();
+      const targetedFlags = oldState.targetedBoxes.slice();
+      getRegionAroundIndex(index).forEach((i: number) => {
+        triggerVals[i] = modifier(triggerVals[i]);
+        targetedFlags[i] = true;
+      });
+      return {
+        ...oldState,
+        sinkTriggeredBoxes: triggerVals,
+        targetedBoxes: targetedFlags,
+      };
+    },
+    []
+  );
 
-  const sinkAroundIndex = modifyAroundIndex((v) => v + 1);
-
-  const unSinkAroundIndex = modifyAroundIndex((v) => v - 1);
-
-  const handleEntered = (i: number) =>
-    setGameState((currSt: LightsOutState) => sinkAroundIndex(currSt, i));
-  const handleLeft = (i: number) =>
-    setGameState((currSt: LightsOutState) => unSinkAroundIndex(currSt, i));
+  const handleEntered = useCallback(
+    (i: number) =>
+      setGameState((currSt: LightsOutState) =>
+        modifySinkValAroundIndex((v) => v + 1)(currSt, i)
+      ),
+    [modifySinkValAroundIndex]
+  );
+  const handleLeft = useCallback(
+    (i: number) =>
+      setGameState((currSt: LightsOutState) =>
+        modifySinkValAroundIndex((v) => v - 1)(currSt, i)
+      ),
+    [modifySinkValAroundIndex]
+  );
 
   const turnAroundIndex = (
     oldState: LightsOutState,
@@ -67,17 +76,20 @@ const useGameState = (): {
       targetedBoxes: targetedFlags,
     };
   };
-  const handleClicked = (i: number) =>
-    setGameState((currSt: LightsOutState) => turnAroundIndex(currSt, i));
+  const handleClicked = useCallback(
+    (i: number) =>
+      setGameState((currSt: LightsOutState) => turnAroundIndex(currSt, i)),
+    []
+  );
 
-  const toggleTargetedBox = (i: number) => {
+  const toggleTargetedBox = useCallback((i: number) => {
     const update = (oldState: LightsOutState) => {
       const activeBoxes = oldState.activeBoxes.slice();
       activeBoxes[i] = !activeBoxes[i];
       return { ...oldState, activeBoxes };
     };
     setGameState(update);
-  };
+  }, []);
 
   return {
     gameState,

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "../ColorBoxLightsOut/Box";
 import "./LightsOut.css";
-import Gallery, { GalleryProps } from "../Gallery-Layout/Gallery";
-import { gameConfig, totalNumberOfBoxes } from "../gameInit";
+import { Gallery } from "../Gallery-Layout/Gallery";
+import { totalNumberOfBoxes, boxSize } from "../gameInit";
 import { cornerToRound } from "./aux";
 import useGameState from "./useGameState";
 
@@ -15,16 +15,16 @@ const LightsOut = () => {
     toggleTargetedBox,
   } = useGameState();
 
-  const gameOn = (): boolean => {
+  const gameOn = useMemo(() => {
     return gameState.activeBoxes.some((boxActive: boolean) => boxActive);
-  };
+  }, [gameState]);
 
-  const renderBoxes = (boxSize: number) => {
+  const boxes = useMemo(() => {
     return new Array(totalNumberOfBoxes)
       .fill("")
       .map((_, index) => (
         <Box
-          frozen={!gameOn()}
+          frozen={!gameOn}
           width={boxSize}
           height={boxSize}
           index={index}
@@ -40,18 +40,21 @@ const LightsOut = () => {
           key={index}
         ></Box>
       ));
-  };
+  }, [
+    gameState, // the only thing that'll change between renders
+    gameOn, // memo-ed
+    handleClicked, // callback-ed
+    handleEntered, // callback-ed
+    handleLeft, // callback-ed
+    toggleTargetedBox, // callback-ed
+  ]);
 
-  const props: GalleryProps = {
-    renderBoxes,
-    ...gameConfig,
-  };
-  const message = gameOn() ? "Lights Out" : "Totally Nailed It!";
-  const titleClass = "lightsout" + (gameOn() ? "" : " finished");
+  const message = gameOn ? "Lights Out" : "Totally Nailed It!";
+  const titleClass = "lightsout" + (gameOn ? "" : " finished");
   return (
     <>
       <h1 className={titleClass}>{message}</h1>
-      <Gallery {...props} />
+      <Gallery>{boxes}</Gallery>
     </>
   );
 };
