@@ -27,7 +27,7 @@ export interface BoxProps {
   frozen: boolean;
 }
 
-const Box = (props: BoxProps) => {
+const Box: React.FC<BoxProps> = (props: BoxProps) => {
   const {
     width,
     height,

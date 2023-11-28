@@ -6,7 +6,7 @@ import { totalNumberOfBoxes, boxSize } from "../gameInit";
 import { cornerToRound } from "./aux";
 import useGameState from "./useGameState";
 
-const LightsOut = () => {
+const LightsOut: React.FC = () => {
   const {
     gameState,
     handleClicked,
@@ -15,11 +15,11 @@ const LightsOut = () => {
     toggleTargetedBox,
   } = useGameState();
 
-  const gameOn = useMemo(() => {
+  const gameOn: boolean = useMemo(() => {
     return gameState.activeBoxes.some((boxActive: boolean) => boxActive);
   }, [gameState]);
 
-  const boxes = useMemo(() => {
+  const boxes: JSX.Element[] = useMemo(() => {
     return new Array(totalNumberOfBoxes)
       .fill("")
       .map((_, index) => (
